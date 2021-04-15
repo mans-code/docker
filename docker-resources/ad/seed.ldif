@@ -1,0 +1,67 @@
+# LDIF Export for dc=pass,dc=gov
+# Server: openldap (openldap)
+
+
+#Entry: ou=client,dc=pass,dc=gov  "just an entry to put all clients under"  
+dn: ou=client,dc=pass,dc=gov
+objectclass: top
+objectclass: organizationalUnit
+ou: client
+
+# create clients belonging to developers 
+# Entry: uid=bob,ou=client,dc=pass,dc=gov
+dn: uid=bob,ou=client,dc=pass,dc=gov
+cn: bob hamilton
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+objectclass: custom
+sn: Hamilton
+uid: bob
+displayName: yo-bob
+givenName: bob
+mail: bob@gmail.com
+telephoneNumber: 0551934061
+userpassword: bobspassword
+sAMAccountName: bobsamAccount
+
+# create clients belonging to operators 
+dn: uid=mans,ou=client,dc=pass,dc=gov
+cn: mansour saad
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+objectclass: custom
+sn: mansour
+uid: mans
+displayName: yo-mans
+telephoneNumber: 055193401
+givenName: mans
+mail: mans@gmail.com
+userpassword: manspassword
+sAMAccountName: manssamAccount
+
+#"just an entry to put all clients categories under"  
+# Entry: ou=categories,dc=pass,dc=gov 
+dn: ou=categories,dc=pass,dc=gov
+objectclass: top
+objectclass: organizationalUnit
+ou: categories
+
+#create two categories of clients "devlopers & operators"  
+# Entry defines developers group & the group members: 
+dn: cn=developers,ou=categories,dc=pass,dc=gov
+cn: developers
+objectclass: top
+objectclass: groupOfUniqueNames
+ou: developer
+uniquemember: uid=bob,ou=client,dc=pass,dc=gov
+
+# Entry defines operators group & the group members:
+dn: cn=operators,ou=categories,dc=pass,dc=gov
+cn: operators
+objectclass: top
+objectclass: groupOfUniqueNames
+ou: operators
+uniquemember: uid=mans,ou=client,dc=pass,dc=gov

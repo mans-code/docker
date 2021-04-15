@@ -1,0 +1,78 @@
+version: "3.7"
+services:
+  # openldap:
+  #   image: osixia/openldap:1.5.0 # please refer to https://github.com/osixia/docker-openldap for more info
+  #   container_name: openldap
+  #   hostname: openldap
+  #   command: --copy-service # --loglevel debug  # uncomment to get log
+  #   volumes:
+  #     - ./docker-resources/ad/pass.schema:/container/service/slapd/assets/config/bootstrap/schema/pass.schema
+  #     - ./docker-resources/ad:/container/service/slapd/assets/config/bootstrap/ldif/custom
+  #   ports:
+  #     - "389:389"
+  #     - "636:636"
+  #   environment:
+  #     - LDAP_ORGANISATION=pass
+  #     - LDAP_DOMAIN=pass.gov
+  #     - LDAP_ADMIN_USERNAME=admin
+  #     - LDAP_ADMIN_PASSWORD=admin_Password#
+  #     - LDAP_CONFIG_PASSWORD=config_pass
+  #     - "LDAP_BASE_DN=dc=pass,dc=gov"
+  #     - LDAP_READONLY_USER=true
+  #     - LDAP_READONLY_USER_USERNAME=user-ro
+  #     - LDAP_READONLY_USER_PASSWORD=ro_pass
+  #   networks:
+  #     - passNetwork
+
+  # mssql:
+  #   build:
+  #     context: ./docker-resources/mssql
+  #     dockerfile: Dockerfile
+  #   container_name: mssql
+  #   hostname: mssql
+  #   ports:
+  #     - "1433:1433"
+  #   environment:
+  #     - SA_PASSWORD=admin_Password#
+  #     - ACCEPT_EULA=Y
+  #     - MSSQL_PID=Express
+  #   networks:
+  #     - passNetwork
+
+  db2:
+    build:
+      context: ./docker-resources/db2
+      dockerfile: Dockerfile
+    container_name: db2
+    hostname: db2
+    privileged: true
+    volumes:
+      - db2-data:/database
+    ports:
+      - "50000:50000"
+    environment:
+      - DB2INSTANCE=db2inst1
+      - DB2INST1_PASSWORD=db2inst1
+      - DBNAME=testdb
+      - LICENSE=accept
+    networks:
+      - passNetwork
+
+  # external:
+  #   build:
+  #     context: ./docker-resources/external
+  #     dockerfile: Dockerfile
+  #   container_name: external
+  #   hostname: external
+  #   ports:
+  #     - "8080:8080"
+  #   networks:
+  #     - passNetwork
+
+networks:
+  passNetwork:
+    driver: bridge
+
+volumes:
+  db2-data: # this volume is used to speed the initialization time for db2
+    driver: local

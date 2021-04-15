@@ -1,0 +1,161 @@
+#####################################################################################################################
+# 
+# please refer https://www.openldap.org/doc/admin24/guide.html#Schema%20Specification
+#
+# Schema in openladp is like a class in java. 
+# However, openLadp schema defines the dataFileds names without theres types
+# dataFileds and theres types have to be defined in separate. //LOOK under the schema and dataFileds defintion
+#					
+# To Sum up, we are trying to create an openLadp schema that fits the needs of pass System.
+# we achieve that in two Steps:
+# 1- defines the attributes to be used in the Schema
+# 2- defines the schema(just like creating a java class)
+# 
+#  
+######################################################################################################################
+
+#########################################################################################################################################
+# 1- defines the attributes    attributes=dataFileds 
+#    
+#          ####################################################################
+#	   #Commonly Used Syntaxes("DataType in openldap")                    #
+#	   #								      #						  
+#	   # DataType					   UID	              #
+#	   #   boolean			  	1.3.6.1.4.1.1466.115.121.1.7  #	
+#	   #   directoryString	          	1.3.6.1.4.1.1466.115.121.1.15 #	
+#	   #   distinguishedName		1.3.6.1.4.1.1466.115.121.1.12 #	
+#	   #   integer			  	1.3.6.1.4.1.1466.115.121.1.27 #	
+#	   #   numericString		        1.3.6.1.4.1.1466.115.121.1.36 #	
+#	   #   OID				1.3.6.1.4.1.1466.115.121.1.38 #
+#          ####################################################################
+# 		 
+# The Template to define an schema in openLadp
+#
+#    attributetype ( 1.1.2.1.1 #UID
+#        NAME 'accountExpires' # accountExpires= dataFiled name
+#         EQUALITY caseIgnoreMatch # search matches on str.equalIgnoreCase(oStr)
+#         SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{1024} # dataFiled type is directoryString with a length recommendation of 1042 character
+#	   	 SINGLE_VALUE )  # single not list 
+#
+#
+###########################################################################################################################################
+	
+attributetype ( 1.1.2.1.1 
+        NAME 'accountExpires'
+        EQUALITY caseIgnoreMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{1024} )
+
+attributetype ( 1.1.2.1.2
+        NAME 'badPasswordTime'
+        EQUALITY caseIgnoreMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{1024} )
+
+attributetype ( 1.1.2.1.3
+        NAME 'badPwdCount'
+        EQUALITY caseIgnoreMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{1024} )
+
+attributetype ( 1.1.2.1.4
+        NAME 'lastLogon'
+        EQUALITY caseIgnoreMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{1024} )
+
+attributetype ( 1.1.2.1.5
+        NAME 'lastLogonTimestamp'
+        EQUALITY caseIgnoreMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{1024} )
+
+attributetype ( 1.1.2.1.6
+        NAME 'logonCount'
+        EQUALITY caseIgnoreMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{1024} )
+
+attributetype ( 1.1.2.1.7
+        NAME 'department'
+        EQUALITY caseIgnoreMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{1024} )
+
+attributetype ( 1.1.2.1.8
+        NAME 'pwdLastSet'
+        EQUALITY caseIgnoreMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{1024} )
+		
+attributetype ( 1.1.2.1.9
+        NAME 'sAMAccountName'
+        EQUALITY caseIgnoreMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{1024} )
+
+attributetype ( 1.1.2.1.10
+        NAME 'userAccountControl'
+        EQUALITY caseIgnoreMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{1024} )
+		
+attributetype ( 1.1.2.1.11
+        NAME 'userPrincipalName'
+        EQUALITY caseIgnoreMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{1024} )
+		
+attributetype ( 1.1.2.1.12
+        NAME 'whenChanged'
+        EQUALITY caseIgnoreMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{1024} )
+		
+attributetype ( 1.1.2.1.13
+        NAME 'whenCreated'
+        EQUALITY caseIgnoreMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{1024} )
+		
+attributetype ( 1.1.2.1.14
+        NAME 'lockoutTime'
+        EQUALITY caseIgnoreMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{1024} )
+
+attributetype ( 1.1.2.1.15
+        NAME 'employeeID'
+        EQUALITY caseIgnoreMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{1024} )
+
+###################################################################################################################
+# 2- create the schema(just like creating a java class)
+#
+#    The Template to define an schema in openLadp
+#              
+#       objectCalss ( 1.1.2.2.1                    # UID where the Domine is 1.1
+#			NAME 'passClass'           # className
+#			DESC 'pass-class'          # class description 
+#			SUP intOrgPerson           # sub is equal to extends in java
+#			STRUCTURAL
+#			MAY (                      # MAY=optional
+#				accountExpires $   # accountExpires=dataFiled, $=separator between two dataFiled
+#				date)              # date=dataFiled
+##################################################################################################################
+
+objectclass  ( 1.1.2.2.1
+	NAME 'user'
+	DESC 'user-class'
+	SUP inetOrgPerson
+	STRUCTURAL 
+        MAY mobile )
+
+objectclass  ( 1.1.2.2.2
+	NAME 'custom'
+	DESC 'custom-class'
+	SUP user
+	STRUCTURAL
+	MAY (accountExpires $
+			  badPasswordTime $
+			  badPwdCount $
+			  lastLogon $
+                          lastLogonTimestamp $
+			  logonCount $
+			  name $
+			  pwdLastSet $
+			  sAMAccountName $
+			  userAccountControl $
+			  userPrincipalName $
+			  whenChanged $
+			  whenCreated $
+			  department $
+			  lockoutTime $
+			  employeeID $
+			  mobile ) )
