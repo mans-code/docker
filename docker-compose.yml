@@ -39,35 +39,36 @@ services:
   #   networks:
   #     - passNetwork
 
-  db2:
-    build:
-      context: ./docker-resources/db2
-      dockerfile: Dockerfile
-    container_name: db2
-    hostname: db2
-    privileged: true
-    volumes:
-      - db2-data:/database
-    ports:
-      - "50000:50000"
-    environment:
-      - DB2INSTANCE=db2inst1
-      - DB2INST1_PASSWORD=db2inst1
-      - DBNAME=testdb
-      - LICENSE=accept
-    networks:
-      - passNetwork
-
-  # external:
+  # db2: #add more cpu and fill data script
   #   build:
-  #     context: ./docker-resources/external
+  #     context: ./docker-resources/db2
   #     dockerfile: Dockerfile
-  #   container_name: external
-  #   hostname: external
+  #   container_name: db2
+  #   hostname: db2
+  #   privileged: true
+  #   volumes:
+  #     - db2-data:/database
   #   ports:
-  #     - "8080:8080"
+  #     - "50000:50000"
+  #   environment:
+  #     - DB2INSTANCE=db2inst1
+  #     - DB2INST1_PASSWORD=db2inst1
+  #     - DBNAME=testdb
+  #     - LICENSE=accept
+  #     - AUTOCONFIG=false #reduces start up time
   #   networks:
   #     - passNetwork
+
+  external:
+    build:
+      context: ./docker-resources/external
+      dockerfile: Dockerfile
+    container_name: external
+    hostname: external
+    ports:
+      - "8080:8080"
+    networks:
+      - passNetwork
 
 networks:
   passNetwork:
