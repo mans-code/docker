@@ -1,11 +1,14 @@
 # please refer to https://www.softwaredeveloper.blog/initialize-mssql-in-docker-container
 FROM mcr.microsoft.com/mssql/server:2017-latest
 
+# Create app directory argument
+ARG APP_DIR=/usr/src/app
+
 # Create app directory
-RUN mkdir -p /usr/src/app
+RUN mkdir -p $APP_DIR
 
 # set the work directory
-WORKDIR /usr/src/app
+WORKDIR $APP_DIR
 
 # Copy initialization scripts from this dir to WORKDIR
 COPY . .
